@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Analyze Resume — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-1"><i class="bi bi-search"></i> AI Resume Analysis</h4>
+<p class="text-muted mb-4">{{ resume.original_name }}</p>
+
+<div class="row g-3">
+  <!-- Analysis Form -->
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <h6 class="fw-bold">Run Analysis</h6>
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label small">Paste Job Description <span class="text-muted">(optional but improves ATS score)</span></label>
+          <textarea name="job_description" class="form-control" rows="8" placeholder="Paste the job description here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-cpu"></i> Analyze with Granite AI</button>
+      </form>
+
+      {% if resume.ats_score %}
+      <hr>
+      <div class="text-center">
+        <div class="fw-bold fs-5">ATS Score</div>
+        <div class="display-4 fw-bold text-{% if resume.ats_score >= 75 %}success{% elif resume.ats_score >= 50 %}warning{% else %}danger{% endif %}">
+          {{ resume.ats_score | round(0) | int }}%
+        </div>
+        <small class="text-muted">Last analyzed: {{ resume.last_analyzed.strftime('%d %b %Y %H:%M') if resume.last_analyzed else 'N/A' }}</small>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="col-lg-8">
+    {% if result %}
+      {% if result.error %}
+      <div class="alert alert-danger">{{ result.error }}</div>
+      {% else %}
+        {% if result.analysis_text %}
+        <div class="card p-3 mb-3">
+          <h6 class="fw-bold"><i class="bi bi-file-text"></i> Resume Analysis</h6>
+          <pre class="ai-result">{{ result.analysis_text }}</pre>
+        </div>
+        {% endif %}
+        {% if result.ats_result %}
+        <div class="card p-3">
+          <h6 class="fw-bold"><i class="bi bi-speedometer2"></i> ATS Score Breakdown</h6>
+          <pre class="ai-result">{{ result.ats_result }}</pre>
+        </div>
+        {% endif %}
+      {% endif %}
+    {% elif resume.analysis_json %}
+      {% set prev = resume.analysis_json | tojson %}
+      <div class="alert alert-secondary"><i class="bi bi-clock-history"></i> Previous analysis available. Run a new analysis above.</div>
+    {% else %}
+    <div class="card p-4 text-center text-muted">
+      <i class="bi bi-robot fs-1"></i>
+      <p class="mt-2">Click "Analyze with Granite AI" to get instant AI-powered feedback on your resume.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Career Tools — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-graph-up"></i> Career Tools</h4>
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-map"></i> Career Roadmap</h6>
+      <p class="text-muted small">Get a personalised roadmap from your current role to your dream job with timeline and milestones.</p>
+      <a href="{{ url_for('career.roadmap') }}" class="btn btn-primary mt-auto">Build Roadmap</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-bar-chart-steps"></i> Skill Gap Analysis</h6>
+      <p class="text-muted small">Find missing skills for your target role and get a 12-week learning plan with course recommendations.</p>
+      <a href="{{ url_for('career.skill_gap') }}" class="btn btn-primary mt-auto">Analyse Skills</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-currency-rupee"></i> Salary Insights</h6>
+      <p class="text-muted small">Get salary ranges, negotiation scripts, and hike strategy for any role in any city.</p>
+      <a href="{{ url_for('career.salary') }}" class="btn btn-primary mt-auto">Check Salary</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-envelope-paper"></i> Cover Letter Generator</h6>
+      <p class="text-muted small">Generate a tailored, ATS-optimised cover letter matching the job description.</p>
+      <a href="{{ url_for('career.cover_letter') }}" class="btn btn-primary mt-auto">Generate Letter</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-chat-dots"></i> AI Career Chat</h6>
+      <p class="text-muted small">Ask anything about your career, job market, skills, or opportunities.</p>
+      <a href="{{ url_for('career.chat') }}" class="btn btn-primary mt-auto">Open Chat</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

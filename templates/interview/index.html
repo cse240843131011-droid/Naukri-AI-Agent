@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Interview Prep — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-mic"></i> Interview Preparation Hub</h4>
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-person-check"></i> HR & Technical Prep</h6>
+      <p class="text-muted small">Get personalized interview questions and STAR-method answers for any role and company.</p>
+      <a href="{{ url_for('interview.prep') }}" class="btn btn-primary mt-auto">Start Prep</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-code-slash"></i> Coding Challenges</h6>
+      <p class="text-muted small">Practice DSA and coding interview questions with AI-generated solutions and complexity analysis.</p>
+      <a href="{{ url_for('interview.coding') }}" class="btn btn-primary mt-auto">Start Coding</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h6 class="fw-bold"><i class="bi bi-building"></i> Company Research</h6>
+      <p class="text-muted small">Get deep insights on any company — culture, hiring process, interview questions, and compensation.</p>
+      <a href="{{ url_for('interview.company_research') }}" class="btn btn-primary mt-auto">Research Company</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

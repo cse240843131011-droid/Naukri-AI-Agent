@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Rank Candidates — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-trophy"></i> AI Candidate Ranking</h4>
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card p-3">
+      <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Job Description</label>
+          <textarea name="job_description" class="form-control" rows="6" required placeholder="Paste the full job description here..."></textarea>
+        </div>
+        <hr>
+        <label class="form-label fw-semibold">Candidate Resumes</label>
+        <div class="mb-2">
+          <label class="form-label small">Upload Resume Files (up to 5)</label>
+          <input type="file" name="resume_files" class="form-control" multiple accept=".pdf,.docx,.txt">
+        </div>
+        <p class="text-muted small text-center">— or paste text below —</p>
+        {% for i in range(1, 4) %}
+        <div class="mb-2">
+          <label class="form-label small">Candidate {{ i }} (paste resume text)</label>
+          <textarea name="candidate_{{ i }}" class="form-control" rows="3" placeholder="Paste resume text..."></textarea>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary w-100 mt-2"><i class="bi bi-cpu"></i> Rank Candidates</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    {% if result %}
+    <div class="card p-3">
+      <h6 class="fw-bold mb-2"><i class="bi bi-robot"></i> AI Ranking Report</h6>
+      <pre class="ai-result">{{ result }}</pre>
+    </div>
+    {% else %}
+    <div class="card p-4 text-center text-muted">
+      <i class="bi bi-people fs-1"></i>
+      <p class="mt-2">Provide the JD and candidate resumes to get instant AI-powered ranking.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

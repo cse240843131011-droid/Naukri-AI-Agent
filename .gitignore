@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+
+# Database
+instance/
+*.db
+
+# Uploads
+uploads/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log

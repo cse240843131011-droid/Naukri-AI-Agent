@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}My Applications — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-send-check"></i> My Applications</h4>
+
+{% if applications %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr><th>Company</th><th>Role</th><th>Status</th><th>Date</th><th>Update Status</th></tr>
+    </thead>
+    <tbody>
+      {% for app in applications %}
+      <tr>
+        <td>{{ app.company or '—' }}</td>
+        <td>{{ app.role or '—' }}</td>
+        <td>
+          <span class="badge bg-{{ 'success' if app.status == 'offer' else 'danger' if app.status == 'rejected' else 'primary' if app.status == 'applied' else 'warning' }}">
+            {{ app.status.title() }}
+          </span>
+        </td>
+        <td>{{ app.applied_date.strftime('%d %b %Y') }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('jobs.update_status', app_id=app.id) }}" class="d-flex gap-1">
+            <select name="status" class="form-select form-select-sm" style="width:130px">
+              {% for s in ['applied','screening','interview','offer','rejected','accepted','withdrawn'] %}
+              <option value="{{ s }}" {% if app.status == s %}selected{% endif %}>{{ s.title() }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info"><i class="bi bi-info-circle"></i> No applications yet. <a href="{{ url_for('jobs.index') }}">Browse jobs</a> to get started.</div>
+{% endif %}
+{% endblock %}

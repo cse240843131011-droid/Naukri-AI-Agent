@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Salary Insights — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-currency-rupee"></i> Salary Insights</h4>
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label">Role / Job Title</label>
+          <input type="text" name="role" class="form-control" required placeholder="e.g. Data Analyst">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Years of Experience</label>
+          <input type="number" name="experience_years" class="form-control" value="0" min="0">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          <input type="text" name="location" class="form-control" value="Bangalore" placeholder="e.g. Bangalore, Mumbai">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Key Skills <small class="text-muted">(comma-separated)</small></label>
+          <input type="text" name="skills" class="form-control" placeholder="Python, TensorFlow...">
+        </div>
+        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-cpu"></i> Get Salary Data</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    {% if result %}
+    <div class="card p-3">
+      <pre class="ai-result">{{ result }}</pre>
+    </div>
+    {% else %}
+    <div class="card p-4 text-center text-muted">
+      <i class="bi bi-currency-rupee fs-1"></i>
+      <p class="mt-2">Enter role details to get salary ranges, negotiation tips, and more.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

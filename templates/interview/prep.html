@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Interview Prep — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-person-check"></i> AI Interview Preparation</h4>
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <h6 class="fw-bold mb-3">Interview Details</h6>
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label">Target Role</label>
+          <input type="text" name="role" class="form-control" required placeholder="e.g. Software Engineer">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Company</label>
+          <input type="text" name="company" class="form-control" required placeholder="e.g. Google, TCS...">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Years of Experience</label>
+          <input type="number" name="experience_years" class="form-control" value="0" min="0" max="30">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Interview Type</label>
+          <select name="interview_type" class="form-select">
+            <option value="full">Full (HR + Technical + Behavioral)</option>
+            <option value="hr">HR Round Only</option>
+            <option value="technical">Technical Round Only</option>
+            <option value="behavioral">Behavioral Only</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-cpu"></i> Generate Questions</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    {% if result %}
+    <div class="card p-3">
+      <h6 class="fw-bold mb-2"><i class="bi bi-robot"></i> AI Interview Guide</h6>
+      <pre class="ai-result">{{ result }}</pre>
+    </div>
+    {% else %}
+    <div class="card p-4 text-center text-muted">
+      <i class="bi bi-robot fs-1"></i>
+      <p class="mt-2">Fill in the details and click "Generate Questions" to get a personalized interview guide.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

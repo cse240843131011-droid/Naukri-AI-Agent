@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}AI Job Recommendations — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-robot"></i> AI Job Recommendations</h4>
+{% if result %}
+<div class="card p-4">
+  <pre class="ai-result">{{ result }}</pre>
+</div>
+{% else %}
+<div class="alert alert-info"><i class="bi bi-info-circle"></i> Generating recommendations based on your profile...</div>
+<script>window.location.reload();</script>
+{% endif %}
+<a href="{{ url_for('jobs.index') }}" class="btn btn-outline-secondary mt-3"><i class="bi bi-arrow-left"></i> Back to Jobs</a>
+{% endblock %}

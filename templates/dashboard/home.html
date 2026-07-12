@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Naukri AI{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="bi bi-house-heart"></i> Welcome back, {{ current_user.name.split()[0] }}! 👋</h4>
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="card p-3 text-center">
+      <div class="fs-1 text-primary"><i class="bi bi-file-earmark-text"></i></div>
+      <div class="fs-2 fw-bold">{{ stats.resumes }}</div>
+      <div class="text-muted">Resumes Uploaded</div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card p-3 text-center">
+      <div class="fs-1 text-success"><i class="bi bi-send-check"></i></div>
+      <div class="fs-2 fw-bold">{{ stats.applications }}</div>
+      <div class="text-muted">Applications Tracked</div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card p-3 text-center">
+      <div class="fs-1 text-warning"><i class="bi bi-bookmark-star"></i></div>
+      <div class="fs-2 fw-bold">{{ stats.saved_jobs }}</div>
+      <div class="text-muted">Saved Jobs</div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card p-3 text-center">
+      <div class="fs-1 text-info"><i class="bi bi-speedometer2"></i></div>
+      <div class="fs-2 fw-bold">{{ stats.ats_score | round(0) | int }}%</div>
+      <div class="text-muted">ATS Score</div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-3 mb-4">
+  <div class="col-12"><h5 class="fw-semibold">⚡ Quick Actions</h5></div>
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('resume.upload') }}" class="card p-3 text-center text-decoration-none d-block hover-shadow">
+      <i class="bi bi-upload fs-3 text-primary"></i><br><small>Upload Resume</small>
+    </a>
+  </div>
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('jobs.index') }}" class="card p-3 text-center text-decoration-none d-block">
+      <i class="bi bi-search fs-3 text-success"></i><br><small>Browse Jobs</small>
+    </a>
+  </div>
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('interview.prep') }}" class="card p-3 text-center text-decoration-none d-block">
+      <i class="bi bi-mic fs-3 text-warning"></i><br><small>Interview Prep</small>
+    </a>
+  </div>
+  <div class="col-6 col-md-3">
+    <a href="{{ url_for('career.chat') }}" class="card p-3 text-center text-decoration-none d-block">
+      <i class="bi bi-robot fs-3 text-info"></i><br><small>AI Chat</small>
+    </a>
+  </div>
+</div>
+
+<!-- Recent Applications -->
+{% if recent_apps %}
+<div class="card p-3">
+  <h6 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Recent Applications</h6>
+  <div class="table-responsive">
+    <table class="table table-sm table-hover mb-0">
+      <thead class="table-light"><tr><th>Company</th><th>Role</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for app in recent_apps %}
+        <tr>
+          <td>{{ app.company or '—' }}</td>
+          <td>{{ app.role or '—' }}</td>
+          <td>
+            <span class="badge bg-{{ 'success' if app.status == 'offer' else 'danger' if app.status == 'rejected' else 'primary' }}">
+              {{ app.status.title() }}
+            </span>
+          </td>
+          <td>{{ app.applied_date.strftime('%d %b %Y') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <a href="{{ url_for('jobs.applications') }}" class="btn btn-sm btn-outline-primary mt-2">View All</a>
+</div>
+{% else %}
+<div class="alert alert-info">
+  <i class="bi bi-info-circle"></i> No applications yet.
+  <a href="{{ url_for('jobs.index') }}">Browse jobs</a> and start applying!
+</div>
+{% endif %}
+{% endblock %}
