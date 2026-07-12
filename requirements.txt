@@ -16,8 +16,7 @@ Jinja2==3.1.4
 
 # --- IBM watsonx.ai SDK ---
 ibm-watsonx-ai==1.1.2
-ibm-cloud-sdk-core==3.20.3
-ibm-platform-services==0.53.0
+ibm-cloud-sdk-core>=3.24.0
 
 # --- IBM Watson Discovery (RAG) ---
 ibm-watson==8.1.0
@@ -54,7 +53,6 @@ marshmallow==3.22.0
 email-validator==2.2.0
 
 # --- Utilities ---
-uuid==1.30
 Pillow==10.4.0
 python-dateutil==2.9.0
 bleach==6.1.0
