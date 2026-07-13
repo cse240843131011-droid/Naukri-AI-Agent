@@ -39,7 +39,7 @@ nltk==3.9.1
 spacy==3.8.2
 scikit-learn==1.5.2
 numpy==1.26.4
-pandas==2.1.4
+pandas==2.2.2
 
 # --- Environment & Config ---
 python-dotenv==1.0.1
