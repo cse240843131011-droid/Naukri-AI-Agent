@@ -36,7 +36,7 @@ python-magic==0.4.27
 
 # --- NLP / Text Processing ---
 nltk==3.9.1
-spacy==3.7.5
+spacy==3.7.4
 scikit-learn==1.5.1
 numpy==1.26.4
 pandas==2.1.4
