@@ -2,71 +2,29 @@
 #  IBM Naukri Agent — Python Dependencies
 # ============================================================
 
-# --- Flask Core ---
 Flask==3.0.3
 Flask-SQLAlchemy==3.1.1
 Flask-Login==0.6.3
 Flask-WTF==1.2.1
 Flask-Mail==0.10.0
 Flask-Migrate==4.0.7
+
 Werkzeug==3.0.3
-WTForms==3.1.2
-itsdangerous==2.2.0
 Jinja2==3.1.4
+itsdangerous==2.2.0
+WTForms==3.1.2
 
-# --- IBM watsonx.ai SDK ---
-ibm-watsonx-ai==1.3.0
-ibm-cloud-sdk-core==3.24.3
-
-# --- IBM Watson Discovery (RAG) ---
-ibm-watson==8.1.0
-
-# --- IBM Cloud Object Storage ---
-ibm-cos-sdk==2.13.6
-
-# --- Database ---
 SQLAlchemy==2.0.35
 alembic==1.13.3
 
-# --- Document Processing ---
-PyPDF2==3.0.1
-pdfplumber==0.11.4
-python-docx==1.1.2
-python-magic==0.4.27
+python-dotenv
 
-# --- NLP / Text Processing ---
-nltk==3.9.1
-scikit-learn==1.5.1
-numpy==1.26.4
-pandas==2.1.4
+ibm-watsonx-ai
 
-# --- Environment & Config ---
-python-dotenv==1.0.1
+PyPDF2
+pdfplumber
+python-docx
 
-# --- HTTP / API ---
-requests==2.32.4
-httpx==0.27.2
+requests
 
-# --- Validation ---
-marshmallow==3.22.0
-email-validator==2.2.0
-
-# --- Utilities ---
-Pillow==10.4.0
-python-dateutil==2.9.0
-bleach==6.1.0
-
-# --- Caching ---
-redis==5.1.1
-Flask-Caching==2.3.0
-
-# --- Production Server ---
-gunicorn==23.0.0
-
-# --- Security ---
-cryptography==43.0.3
-PyJWT==2.11.0
-
-# --- Testing ---
-pytest==8.3.3
-pytest-flask==1.3.0
+gunicorn
