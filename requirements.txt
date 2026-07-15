@@ -24,6 +24,7 @@ ibm-watsonx-ai
 PyPDF2
 pdfplumber
 python-docx
+Markdown==3.7
 
 requests
 
