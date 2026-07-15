@@ -1,6 +1,4 @@
-"""
-app.py — IBM Naukri Agent: Flask Application Factory & Entry Point
-"""
+# app.py — IBM Naukri Agent: Flask Application Factory & Entry Point
 import os
 from flask import Flask
 from flask_login import LoginManager
@@ -17,6 +15,7 @@ def create_app(config_class=None):
     # ── Load Config ────────────────────────────────────────────────────────
     cfg = config_class or get_config()
     app.config.from_object(cfg)
+    print("1. Config loaded")
     print("=" * 60)
     print("DATABASE URI:", app.config["SQLALCHEMY_DATABASE_URI"])
     print("=" * 60)
@@ -30,9 +29,12 @@ def create_app(config_class=None):
 
     # ── Extensions ────────────────────────────────────────────────────────
     db.init_app(app)
+    print("2. Database initialized")
     migrate = Migrate(app, db)
 
     login_manager = LoginManager(app)
+    login_manager.init_app(app)
+    print("3. Login manager initialized")
     login_manager.login_view = "auth.login"
     login_manager.login_message_category = "info"
 
@@ -91,7 +93,7 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(
-        host="127.0.0.1",
-        port=int(os.environ.get("PORT", 5050)),
-        debug=app.config.get("DEBUG", True),
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 10000)),
+        debug=False,
     )
