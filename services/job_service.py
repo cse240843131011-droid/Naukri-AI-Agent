@@ -1,108 +1,156 @@
 """
 services/job_service.py
-CRUD + matching logic for Job, SavedJob, and JobApplication models.
+AI-powered Job Recommendation Service using IBM Granite
 """
-from __future__ import annotations
-from datetime import datetime
 
-from models.user import db
-from models.job import Job, SavedJob, JobApplication
+from __future__ import annotations
+
+import json
+
+from services.watsonx_service import watsonx
 
 
 class JobService:
-    """Handles job search, save, and application tracking."""
+    """Generate AI job recommendations from resume content."""
 
     def __init__(self, watsonx_service=None):
-        self.wx = watsonx_service
+        self.wx = watsonx_service or watsonx
 
-    # ── Jobs ──────────────────────────────────────────────────────────────
-    def search(self, title: str = "", location: str = "", work_mode: str = "",
-               job_type: str = "", experience_max: float = None):
-        q = Job.query.filter_by(is_active=True)
-        if title:
-            q = q.filter(Job.title.ilike(f"%{title}%"))
-        if location:
-            q = q.filter(Job.location.ilike(f"%{location}%"))
-        if work_mode:
-            q = q.filter_by(work_mode=work_mode)
-        if job_type:
-            q = q.filter_by(job_type=job_type)
-        if experience_max is not None:
-            q = q.filter(Job.experience_min <= experience_max)
-        return q.order_by(Job.posted_date.desc())
+    def recommend_jobs(self, resume):
+        """
+        Generate AI job recommendations from the user's resume.
+        """
 
-    def get_all_active(self):
-        return Job.query.filter_by(is_active=True).order_by(Job.posted_date.desc()).all()
+        resume_text = resume.raw_text or ""
 
-    def get_by_id(self, job_id: int) -> Job | None:
-        return Job.query.get(job_id)
+        if not resume_text.strip():
+            return {
+                "success": False,
+                "message": "Resume text is empty.",
+                "jobs": []
+            }
 
-    def create(self, data: dict) -> Job:
-        job = Job(**data)
-        db.session.add(job)
-        db.session.commit()
-        return job
+        ats_score = resume.ats_score or 0
 
-    # ── Saved Jobs ────────────────────────────────────────────────────────
-    def save_job(self, user_id: int, job_id: int) -> SavedJob | None:
-        existing = SavedJob.query.filter_by(user_id=user_id, job_id=job_id).first()
-        if existing:
-            return existing
-        saved = SavedJob(user_id=user_id, job_id=job_id)
-        db.session.add(saved)
-        db.session.commit()
-        return saved
+        # -----------------------------
+        # IMPROVED GRANITE PROMPT
+        # -----------------------------
+        prompt = f"""
+You are an expert AI Career Advisor and Recruitment Consultant.
 
-    def unsave_job(self, user_id: int, job_id: int) -> bool:
-        saved = SavedJob.query.filter_by(user_id=user_id, job_id=job_id).first()
-        if saved:
-            db.session.delete(saved)
-            db.session.commit()
-            return True
-        return False
+Your task is to analyze the candidate's resume and ATS score and recommend the TOP 5 most suitable jobs.
 
-    def is_saved(self, user_id: int, job_id: int) -> bool:
-        return SavedJob.query.filter_by(user_id=user_id, job_id=job_id).first() is not None
+Candidate ATS Score:
+{ats_score}
 
-    def get_saved_jobs(self, user_id: int):
-        return (SavedJob.query
-                .filter_by(user_id=user_id)
-                .order_by(SavedJob.saved_at.desc())
-                .all())
+Resume:
+{resume_text}
 
-    # ── Applications ───────────────────────────────────────────────────────
-    def apply(self, user_id: int, job_id: int = None, company: str = "",
-              role: str = "", notes: str = "") -> JobApplication:
-        app = JobApplication(
-            user_id=user_id,
-            job_id=job_id,
-            company=company,
-            role=role,
-            notes=notes,
-            applied_date=datetime.utcnow(),
-        )
-        db.session.add(app)
-        db.session.commit()
-        return app
+For each job recommendation provide:
 
-    def update_status(self, application_id: int, status: str) -> bool:
-        app = JobApplication.query.get(application_id)
-        if app:
-            app.status = status
-            db.session.commit()
-            return True
-        return False
+- title
+- company
+- match (0-100)
+- salary
+- location
+- required_skills
+- missing_skills
+- reason
 
-    def get_applications(self, user_id: int):
-        return (JobApplication.query
-                .filter_by(user_id=user_id)
-                .order_by(JobApplication.applied_date.desc())
-                .all())
+Return ONLY valid JSON.
 
-    # ── AI Job Matching ────────────────────────────────────────────────────
-    def ai_recommend(self, user_profile: dict, preferences: dict = None) -> str:
-        """Return Granite AI job recommendations text."""
-        if not self.wx:
-            return "[WatsonX not configured]"
-        from prompts import job_recommendation_prompt
-        return self.wx.generate(job_recommendation_prompt(user_profile, preferences))
+Example:
+
+[
+    {{
+        "title": "Python Backend Developer",
+        "company": "IBM",
+        "match": 95,
+        "salary": "₹8-12 LPA",
+        "location": "Bangalore",
+        "required_skills": [
+            "Python",
+            "Flask",
+            "SQL"
+        ],
+        "missing_skills": [
+            "Docker",
+            "AWS"
+        ],
+        "reason": "Excellent Python and backend development profile."
+    }}
+]
+
+Rules:
+
+1. Return ONLY JSON.
+2. Do NOT write markdown.
+3. Do NOT write explanations.
+4. Return exactly 5 jobs.
+5. Match must be between 0 and 100.
+6. Salary should be realistic for India.
+"""
+
+        try:
+
+            response = self.wx.generate(prompt)
+            print("=" * 80)
+            print("RAW GRANITE RESPONSE")
+            print(response)
+            print("=" * 80)
+
+            if not response:
+                return {
+                    "success": False,
+                    "message": "Granite returned an empty response.",
+                    "jobs": []
+                }
+
+            response = response.strip()
+
+            # Remove markdown code fences
+            if response.startswith("```json"):
+                response = response.replace("```json", "", 1)
+
+            if response.startswith("```"):
+                response = response.replace("```", "", 1)
+
+            if response.endswith("```"):
+                response = response[:-3]
+
+            response = response.strip()
+
+            # -----------------------------
+            # SAFE JSON PARSING
+            # -----------------------------
+            try:
+                jobs = json.loads(response)
+
+            except json.JSONDecodeError:
+
+                start = response.find("[")
+
+                end = response.rfind("]")
+
+                if start != -1 and end != -1:
+                    jobs = json.loads(response[start:end + 1])
+                else:
+                    raise
+
+            return {
+                "success": True,
+                "jobs": jobs
+            }
+
+        except Exception as e:
+
+            print("Job Recommendation Error:", e)
+
+            return {
+                "success": False,
+                "message": str(e),
+                "jobs": []
+            }
+
+
+job_service = JobService()

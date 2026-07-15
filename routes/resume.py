@@ -58,6 +58,9 @@ def analyze(resume_id):
         jd  = request.form.get("job_description", "").strip() or None
         svc = _get_service()
         result = svc.analyze(resume, current_user.to_profile_dict(), jd)
+
+        db.session.refresh(resume)
+
         flash("Analysis complete!", "success")
 
     return render_template("resume/analyze.html", resume=resume, result=result)

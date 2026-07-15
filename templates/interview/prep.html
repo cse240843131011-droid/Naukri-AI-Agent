@@ -34,9 +34,28 @@
   </div>
   <div class="col-lg-8">
     {% if result %}
-    <div class="card p-3">
-      <h6 class="fw-bold mb-2"><i class="bi bi-robot"></i> AI Interview Guide</h6>
-      <pre class="ai-result">{{ result }}</pre>
+    <div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+            <i class="bi bi-robot"></i>
+            AI Interview Guide
+        </h5>
+
+    </div>
+
+    <div class="card-body ai-result">
+
+        <div class="markdown-body ai-result">
+
+    {{ result_html|safe }}
+
+</div>
+
+    </div>
+
+</div>
     </div>
     {% else %}
     <div class="card p-4 text-center text-muted">

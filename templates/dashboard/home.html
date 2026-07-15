@@ -1,94 +1,324 @@
 {% extends "base.html" %}
+
 {% block title %}Dashboard — Naukri AI{% endblock %}
+
 {% block content %}
-<h4 class="fw-bold mb-4"><i class="bi bi-house-heart"></i> Welcome back, {{ current_user.name.split()[0] }}! 👋</h4>
 
-<!-- Stat Cards -->
+<!-- ================= HERO SECTION ================= -->
+
+<div class="card shadow-lg border-0 rounded-4 mb-4 fade-card">
+    <div class="card-body p-5">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h2 class="fw-bold text-primary mb-3">
+                    <i class="bi bi-robot"></i>
+                    IBM Naukri AI
+                </h2>
+
+                <h4 class="fw-semibold">
+                    Welcome back,
+                    <span class="text-primary">
+                        {{ current_user.name }}
+                    </span>
+                    👋
+                </h4>
+
+                <p class="text-muted mt-3">
+                    Your AI-powered career assistant.
+                    Upload your resume, improve your ATS score,
+                    discover AI-powered job recommendations,
+                    prepare for interviews, and accelerate your career.
+                </p>
+
+                <div class="mt-4">
+
+                    <a href="{{ url_for('resume.upload') }}"
+                       class="btn btn-primary me-2">
+                        <i class="bi bi-upload"></i>
+                        Upload Resume
+                    </a>
+
+                    <a href="{{ url_for('jobs.index') }}"
+                       class="btn btn-outline-primary">
+                        <i class="bi bi-search"></i>
+                        Browse Jobs
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 text-center">
+
+                <i class="bi bi-briefcase-fill text-primary"
+                   style="font-size:120px;"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= STATISTICS ================= -->
+
 <div class="row g-3 mb-4">
-  <div class="col-sm-6 col-xl-3">
-    <div class="card p-3 text-center">
-      <div class="fs-1 text-primary"><i class="bi bi-file-earmark-text"></i></div>
-      <div class="fs-2 fw-bold">{{ stats.resumes }}</div>
-      <div class="text-muted">Resumes Uploaded</div>
+
+    <div class="col-md-3">
+
+        <div class="card dashboard-card h-100">
+
+            <i class="bi bi-file-earmark-text"></i>
+
+            <h2>{{ stats.resumes }}</h2>
+
+            <p>My Resumes</p>
+
+        </div>
+
     </div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card p-3 text-center">
-      <div class="fs-1 text-success"><i class="bi bi-send-check"></i></div>
-      <div class="fs-2 fw-bold">{{ stats.applications }}</div>
-      <div class="text-muted">Applications Tracked</div>
+
+    <div class="col-md-3">
+
+        <div class="card dashboard-card h-100">
+
+            <i class="bi bi-send-check"></i>
+
+            <h2>{{ stats.applications }}</h2>
+
+            <p>Jobs Applied</p>
+
+        </div>
+
     </div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card p-3 text-center">
-      <div class="fs-1 text-warning"><i class="bi bi-bookmark-star"></i></div>
-      <div class="fs-2 fw-bold">{{ stats.saved_jobs }}</div>
-      <div class="text-muted">Saved Jobs</div>
+
+    <div class="col-md-3">
+
+        <div class="card dashboard-card h-100">
+
+            <i class="bi bi-stars"></i>
+
+            <h2>{{ stats.recommended_jobs }}</h2>
+
+            <p>AI Recommended Jobs</p>
+
+        </div>
+
     </div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card p-3 text-center">
-      <div class="fs-1 text-info"><i class="bi bi-speedometer2"></i></div>
-      <div class="fs-2 fw-bold">{{ stats.ats_score | round(0) | int }}%</div>
-      <div class="text-muted">ATS Score</div>
+
+    <div class="col-md-3">
+
+        <div class="card dashboard-card h-100">
+
+            <i class="bi bi-speedometer2"></i>
+
+            <h2>{{ stats.ats_score|round(0)|int }}%</h2>
+
+            <p>AI ATS Score</p>
+
+        </div>
+
     </div>
-  </div>
+
 </div>
 
-<!-- Quick Actions -->
-<div class="row g-3 mb-4">
-  <div class="col-12"><h5 class="fw-semibold">⚡ Quick Actions</h5></div>
-  <div class="col-6 col-md-3">
-    <a href="{{ url_for('resume.upload') }}" class="card p-3 text-center text-decoration-none d-block hover-shadow">
-      <i class="bi bi-upload fs-3 text-primary"></i><br><small>Upload Resume</small>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ url_for('jobs.index') }}" class="card p-3 text-center text-decoration-none d-block">
-      <i class="bi bi-search fs-3 text-success"></i><br><small>Browse Jobs</small>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ url_for('interview.prep') }}" class="card p-3 text-center text-decoration-none d-block">
-      <i class="bi bi-mic fs-3 text-warning"></i><br><small>Interview Prep</small>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ url_for('career.chat') }}" class="card p-3 text-center text-decoration-none d-block">
-      <i class="bi bi-robot fs-3 text-info"></i><br><small>AI Chat</small>
-    </a>
-  </div>
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="card shadow-sm border-0 rounded-4 mb-4">
+
+    <div class="card-body">
+
+        <h5 class="fw-bold mb-4">
+
+            <i class="bi bi-lightning-charge-fill text-warning"></i>
+
+            Quick Actions
+
+        </h5>
+
+        <div class="row g-3">
+
+            <div class="col-md-3">
+
+                <a href="{{ url_for('resume.upload') }}"
+                   class="btn btn-outline-primary w-100 p-3">
+
+                    <i class="bi bi-upload fs-4"></i>
+
+                    <br>
+
+                    Upload Resume
+
+                </a>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <a href="{{ url_for('jobs.index') }}"
+                   class="btn btn-outline-success w-100 p-3">
+
+                    <i class="bi bi-search fs-4"></i>
+
+                    <br>
+
+                    Browse Jobs
+
+                </a>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <a href="{{ url_for('interview.prep') }}"
+                   class="btn btn-outline-warning w-100 p-3">
+
+                    <i class="bi bi-mic fs-4"></i>
+
+                    <br>
+
+                    Interview Prep
+
+                </a>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <a href="{{ url_for('career.chat') }}"
+                   class="btn btn-outline-info w-100 p-3">
+
+                    <i class="bi bi-robot fs-4"></i>
+
+                    <br>
+
+                    AI Career Chat
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<!-- Recent Applications -->
-{% if recent_apps %}
-<div class="card p-3">
-  <h6 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Recent Applications</h6>
-  <div class="table-responsive">
-    <table class="table table-sm table-hover mb-0">
-      <thead class="table-light"><tr><th>Company</th><th>Role</th><th>Status</th><th>Date</th></tr></thead>
-      <tbody>
-        {% for app in recent_apps %}
-        <tr>
-          <td>{{ app.company or '—' }}</td>
-          <td>{{ app.role or '—' }}</td>
-          <td>
-            <span class="badge bg-{{ 'success' if app.status == 'offer' else 'danger' if app.status == 'rejected' else 'primary' }}">
-              {{ app.status.title() }}
-            </span>
-          </td>
-          <td>{{ app.applied_date.strftime('%d %b %Y') }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <a href="{{ url_for('jobs.applications') }}" class="btn btn-sm btn-outline-primary mt-2">View All</a>
+<!-- ================= RECENT APPLICATIONS ================= -->
+
+<div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="fw-bold">
+
+                <i class="bi bi-clock-history"></i>
+
+                Recent Applications
+
+            </h5>
+
+            <a href="{{ url_for('jobs.applications') }}"
+               class="btn btn-sm btn-outline-primary">
+
+                View All
+
+            </a>
+
+        </div>
+
+        {% if recent_apps %}
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Company</th>
+                        <th>Job Role</th>
+                        <th>Status</th>
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for app in recent_apps %}
+
+                    <tr>
+
+                        <td>{{ app.company }}</td>
+
+                        <td>{{ app.job_title }}</td>
+
+                        <td>
+
+                            {% if app.status=="Applied" %}
+                                <span class="badge bg-primary">Applied</span>
+
+                            {% elif app.status=="Interview" %}
+                                <span class="badge bg-warning text-dark">Interview</span>
+
+                            {% elif app.status=="Offer" %}
+                                <span class="badge bg-success">Offer</span>
+
+                            {% elif app.status=="Rejected" %}
+                                <span class="badge bg-danger">Rejected</span>
+
+                            {% else %}
+                                <span class="badge bg-secondary">{{ app.status }}</span>
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {{ app.applied_at.strftime('%d %b %Y') }}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="alert alert-info mb-0">
+
+            <i class="bi bi-info-circle"></i>
+
+            No job applications yet.
+
+            <a href="{{ url_for('jobs.index') }}">
+
+                Browse Jobs
+
+            </a>
+
+            to get started.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
 </div>
-{% else %}
-<div class="alert alert-info">
-  <i class="bi bi-info-circle"></i> No applications yet.
-  <a href="{{ url_for('jobs.index') }}">Browse jobs</a> and start applying!
-</div>
-{% endif %}
+
 {% endblock %}

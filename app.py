@@ -17,6 +17,12 @@ def create_app(config_class=None):
     # ── Load Config ────────────────────────────────────────────────────────
     cfg = config_class or get_config()
     app.config.from_object(cfg)
+    print("=" * 60)
+    print("DATABASE URI:", app.config["SQLALCHEMY_DATABASE_URI"])
+    print("=" * 60)
+
+    from services.watsonx_service import watsonx
+    watsonx.init_app(app)
 
     # ── Ensure upload dirs exist ───────────────────────────────────────────
     for sub in ("resumes", "job_descriptions"):
@@ -43,6 +49,7 @@ def create_app(config_class=None):
     from routes.recruiter import recruiter_bp
     from routes.career import career_bp
     from routes.api import api_bp
+    from routes.about import about_bp
 
     app.register_blueprint(auth_bp,      url_prefix="/auth")
     app.register_blueprint(dashboard_bp, url_prefix="/dashboard")
@@ -52,6 +59,7 @@ def create_app(config_class=None):
     app.register_blueprint(recruiter_bp, url_prefix="/recruiter")
     app.register_blueprint(career_bp,    url_prefix="/career")
     app.register_blueprint(api_bp,       url_prefix="/api/v1")
+    app.register_blueprint(about_bp,     url_prefix="/about")
 
     # ── Root redirect ──────────────────────────────────────────────────────
     from flask import redirect, url_for
@@ -83,7 +91,7 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8080)),
-        debug=app.config.get("DEBUG", False),
+        host="127.0.0.1",
+        port=int(os.environ.get("PORT", 5050)),
+        debug=app.config.get("DEBUG", True),
     )

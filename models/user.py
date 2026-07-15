@@ -35,8 +35,7 @@ class User(UserMixin, db.Model):
 
     resumes       = db.relationship("Resume", backref="owner", lazy=True)
     applications  = db.relationship("JobApplication", backref="applicant", lazy=True)
-    saved_jobs    = db.relationship("SavedJob", backref="saver", lazy=True)
-
+    
     def set_password(self, pw):  self.password_hash = generate_password_hash(pw)
     def check_password(self, pw): return check_password_hash(self.password_hash, pw)
 

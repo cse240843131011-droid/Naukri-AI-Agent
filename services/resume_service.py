@@ -4,11 +4,11 @@ Business logic for resume upload, text extraction, and AI analysis.
 """
 from __future__ import annotations
 import json
+import markdown
 from datetime import datetime
 
 from models.user import db
 from models.resume import Resume
-
 
 class ResumeService:
     """Handles resume CRUD + AI analysis orchestration."""
@@ -40,10 +40,11 @@ class ResumeService:
         return resume
 
     # ── AI Analysis ───────────────────────────────────────────────────────
+       # ── AI Analysis ───────────────────────────────────────────────────────
     def analyze(self, resume: Resume, user_profile: dict = None, job_description: str = None) -> dict:
         """
         Run Granite AI analysis on a resume.
-        Returns a dict with keys: analysis_text, ats_score, analysis_json.
+        Returns analysis, HTML, ATS score and HTML report.
         """
         from prompts import resume_analysis_prompt, ats_scoring_prompt
 
@@ -52,16 +53,55 @@ class ResumeService:
             return {"error": "No text extracted from resume."}
 
         analysis_text = ""
-        ats_result    = ""
+        ats_result = ""
 
         if self.wx:
             analysis_text = self.wx.generate(
                 resume_analysis_prompt(raw_text, user_profile)
             )
+
             ats_result = self.wx.generate(
                 ats_scoring_prompt(raw_text, job_description)
             )
 
+            print("=" * 80)
+            print("ATS RESULT FROM GRANITE")
+            print(ats_result)
+            print("=" * 80)
+
+        # Convert Markdown to HTML
+        analysis_html = markdown.markdown(
+            analysis_text,
+            extensions=["tables", "fenced_code"]
+        )
+
+        ats_html = markdown.markdown(
+            ats_result,
+            extensions=["tables", "fenced_code"]
+        )
+
+        ats_score = self._parse_ats_score(
+            ats_result or analysis_text
+        )
+
+        analysis_json = json.dumps({
+            "analysis": analysis_text,
+            "ats_analysis": ats_result,
+        })
+
+        resume.ats_score = ats_score
+        resume.analysis_json = analysis_json
+        resume.last_analyzed = datetime.utcnow()
+
+        db.session.commit()
+
+        return {
+            "analysis_text": analysis_text,
+            "analysis_html": analysis_html,
+            "ats_result": ats_result,
+            "ats_html": ats_html,
+            "ats_score": ats_score,
+        }
         ats_score = self._parse_ats_score(ats_result or analysis_text)
 
         analysis_json = json.dumps({
@@ -113,3 +153,5 @@ class ResumeService:
             pass
         db.session.delete(resume)
         db.session.commit()
+
+

@@ -1,42 +1,491 @@
 {% extends "base.html" %}
-{% block title %}Salary Insights — Naukri AI{% endblock %}
+
+{% block title %}AI Salary Insight | IBM Naukri AI{% endblock %}
+
 {% block content %}
-<h4 class="fw-bold mb-4"><i class="bi bi-currency-rupee"></i> Salary Insights</h4>
-<div class="row g-3">
-  <div class="col-lg-4">
-    <div class="card p-3">
-      <form method="POST">
-        <div class="mb-3">
-          <label class="form-label">Role / Job Title</label>
-          <input type="text" name="role" class="form-control" required placeholder="e.g. Data Analyst">
+
+<div class="container-fluid">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <h2 class="fw-bold">
+
+                        <i class="bi bi-cash-coin text-primary"></i>
+
+                        AI Salary Insight
+
+                    </h2>
+
+                    <p class="text-muted mb-1">
+
+                        Discover your estimated salary using IBM Granite AI.
+
+                    </p>
+
+                    <small class="text-muted">
+
+                        Estimate salary based on your experience,
+                        location, skills and target role.
+
+                    </small>
+
+                </div>
+
+                <div class="col-lg-4 text-end">
+
+                    <i class="bi bi-currency-rupee text-success"
+
+                       style="font-size:80px;"></i>
+
+                </div>
+
+            </div>
+
         </div>
-        <div class="mb-3">
-          <label class="form-label">Years of Experience</label>
-          <input type="number" name="experience_years" class="form-control" value="0" min="0">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Location</label>
-          <input type="text" name="location" class="form-control" value="Bangalore" placeholder="e.g. Bangalore, Mumbai">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Key Skills <small class="text-muted">(comma-separated)</small></label>
-          <input type="text" name="skills" class="form-control" placeholder="Python, TensorFlow...">
-        </div>
-        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-cpu"></i> Get Salary Data</button>
-      </form>
+
     </div>
-  </div>
-  <div class="col-lg-8">
-    {% if result %}
-    <div class="card p-3">
-      <pre class="ai-result">{{ result }}</pre>
+
+
+
+    <div class="row">
+
+        <!-- ========================================= -->
+        <!-- LEFT PANEL -->
+        <!-- ========================================= -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person-badge text-primary"></i>
+
+                        Salary Details
+
+                    </h5>
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Target Role
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="role"
+
+                                placeholder="Example: AI Engineer"
+
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Years of Experience
+
+                            </label>
+
+                            <input
+
+                                type="number"
+
+                                class="form-control"
+
+                                name="experience_years"
+
+                                value="0"
+
+                                min="0"
+
+                                max="40">
+
+                        </div>
+                                                <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Location
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="location"
+
+                                value="India"
+
+                                placeholder="Example: Bangalore">
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+
+                                Skills (Comma Separated)
+
+                            </label>
+
+                            <textarea
+
+                                class="form-control"
+
+                                name="skills"
+
+                                rows="5"
+
+                                placeholder="Python, Flask, SQL, Docker, AWS"></textarea>
+
+                        </div>
+
+                        <button
+
+                            class="btn btn-primary btn-lg w-100">
+
+                            <i class="bi bi-stars"></i>
+
+                            Generate Salary Insight
+
+                        </button>
+
+                    </form>
+
+                    <hr class="my-4">
+
+                    <h6 class="fw-bold text-primary">
+
+                        <i class="bi bi-lightbulb-fill"></i>
+
+                        AI Salary Tips
+
+                    </h6>
+
+                    <div class="alert alert-light border rounded-3 mb-2">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        Enter your exact target role.
+
+                    </div>
+
+                    <div class="alert alert-light border rounded-3 mb-2">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        Mention your real years of experience.
+
+                    </div>
+
+                    <div class="alert alert-light border rounded-3 mb-2">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        Add your strongest technical skills.
+
+                    </div>
+
+                    <div class="alert alert-light border rounded-3">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        IBM Granite AI estimates salary based on multiple career factors.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <!-- ========================================= -->
+
+        <!-- RIGHT PANEL -->
+
+        <!-- ========================================= -->
+
+        <div class="col-lg-8">
+          {% if result %}
+
+<div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-header bg-primary text-white py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-cash-stack"></i>
+
+                AI Salary Report
+
+            </h5>
+
+            <span class="badge bg-light text-primary">
+
+                IBM Granite AI
+
+            </span>
+
+        </div>
+
     </div>
-    {% else %}
-    <div class="card p-4 text-center text-muted">
-      <i class="bi bi-currency-rupee fs-1"></i>
-      <p class="mt-2">Enter role details to get salary ranges, negotiation tips, and more.</p>
+
+    <div class="card-body">
+
+        <!-- ===================================== -->
+        <!-- Summary Dashboard -->
+        <!-- ===================================== -->
+
+        <div class="row mb-4">
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-currency-rupee text-success"></i>
+
+                    <h5>Salary</h5>
+
+                    <small class="text-muted">
+
+                        Estimated Package
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-graph-up-arrow text-primary"></i>
+
+                    <h5>Growth</h5>
+
+                    <small class="text-muted">
+
+                        Career Growth
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-geo-alt-fill text-danger"></i>
+
+                    <h5>Location</h5>
+
+                    <small class="text-muted">
+
+                        Market Impact
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-lightning-charge-fill text-warning"></i>
+
+                    <h5>Skills</h5>
+
+                    <small class="text-muted">
+
+                        Salary Booster
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- ===================================== -->
+        <!-- AI Salary Report -->
+        <!-- ===================================== -->
+
+        <div class="markdown-body ai-result">
+
+            {{ result_html|safe }}
+
+        </div>
+
     </div>
-    {% endif %}
-  </div>
+
 </div>
+{% else %}
+
+<div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-body text-center p-5">
+
+        <i class="bi bi-cash-coin display-1 text-primary"></i>
+
+        <h2 class="mt-4">
+
+            Ready for AI Salary Insight
+
+        </h2>
+
+        <p class="text-muted">
+
+            Enter your target role, experience, location and technical skills
+            to receive an AI-powered salary estimation, career growth analysis,
+            and market insights.
+
+        </p>
+
+        <hr class="my-4">
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-currency-rupee text-success"></i>
+
+                    <h5 class="fw-bold">
+
+                        Salary Estimate
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        AI estimates your expected salary range.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-graph-up-arrow text-primary"></i>
+
+                    <h5 class="fw-bold">
+
+                        Growth Potential
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Understand your future earning opportunities.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-geo-alt-fill text-danger"></i>
+
+                    <h5 class="fw-bold">
+
+                        Location Impact
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Compare salary trends across different cities.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-lightning-charge-fill text-warning"></i>
+
+                    <h5 class="fw-bold">
+
+                        Skill Value
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Discover which skills can increase your salary.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

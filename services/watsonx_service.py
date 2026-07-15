@@ -45,16 +45,31 @@ class WatsonXService:
         self._top_p       = app.config.get("WATSONX_TOP_P", 0.8)
         self._top_k       = app.config.get("WATSONX_TOP_K", 40)
         self._rep_penalty = app.config.get("WATSONX_REPETITION_PENALTY", 1.05)
+        print("=" * 60)
+        print("API KEY:", "Loaded" if self._api_key else "Missing")
+        print("PROJECT ID:", "Loaded" if self._project_id else "Missing")
+        print("MODEL:", self._model_id)
+        print("=" * 60)
         self._ready = bool(self._api_key and self._project_id)
+        print("=" * 60)
+        print("READY :", self._ready)
+        print("API KEY :", bool(self._api_key))
+        print("PROJECT :", bool(self._project_id))
+        print("MODEL :", self._model_id)
+        print("=" * 60)
 
     def _get_model(self):
 
         if self._client:
-            return self._client
+            return self._client # Corrected indentation
 
-        if not self._ready or self._init_failed:
+        if not self._ready:
+            print("WatsonX not ready.")
             return None
 
+        if self._init_failed:
+            print("WatsonX initialization previously failed.")
+            return None
         try:
 
             from ibm_watsonx_ai import Credentials
@@ -84,10 +99,17 @@ class WatsonXService:
 
             return self._client
 
-        except Exception:
+        except Exception as e: # Corrected indentation
             self._init_failed = True
             self._client = None
+
+            print("=" * 60)
+            print("IBM Initialization Error")
+            print(type(e))
+            print(e)
             traceback.print_exc()
+            print("=" * 60)
+
             return None
 
     def generate(self, prompt: str) -> str:
@@ -144,13 +166,15 @@ class WatsonXService:
 
             return response.strip()
 
-        except Exception:
-            print("\n" + "=" * 70)
-            print("❌ WATSONX GENERATION ERROR")
+        except Exception as e: # Corrected indentation
+            print("=" * 70)
+            print("IBM Generation Error")
+            print(type(e))
+            print(e)
             traceback.print_exc()
-            print("=" * 70 + "\n")
-            return "[Error while generating AI response.]"
+            print("=" * 70)
 
+            return "[Error while generating AI response.]"
     def _mock_response(self, prompt: str) -> str:
         return (
             "🤖 **Naukri AI** is running in demo mode.\n\n"

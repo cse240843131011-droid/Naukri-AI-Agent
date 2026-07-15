@@ -1,43 +1,508 @@
 {% extends "base.html" %}
-{% block title %}Career Roadmap — Naukri AI{% endblock %}
+
+{% block title %}AI Career Roadmap | IBM Naukri AI{% endblock %}
+
 {% block content %}
-<h4 class="fw-bold mb-4"><i class="bi bi-map"></i> Career Roadmap Builder</h4>
-<div class="row g-3">
-  <div class="col-lg-4">
-    <div class="card p-3">
-      <form method="POST">
-        <div class="mb-3">
-          <label class="form-label">Current Role / Level</label>
-          <input type="text" name="current_role" class="form-control" value="{{ user.current_role or '' }}" placeholder="e.g. Junior Developer, Fresher">
+
+<div class="container-fluid">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <h2 class="fw-bold">
+
+                        <i class="bi bi-map text-primary"></i>
+
+                        AI Career Roadmap Builder
+
+                    </h2>
+
+                    <p class="text-muted mb-1">
+
+                        Build your personalized career growth roadmap using IBM Granite AI.
+
+                    </p>
+
+                    <small class="text-muted">
+
+                        Receive a complete learning path, certifications,
+                        skills, milestones and career guidance.
+
+                    </small>
+
+                </div>
+
+                <div class="col-lg-4 text-end">
+
+                    <i class="bi bi-signpost-split-fill text-primary"
+
+                       style="font-size:80px;"></i>
+
+                </div>
+
+            </div>
+
         </div>
-        <div class="mb-3">
-          <label class="form-label">Target Role</label>
-          <input type="text" name="target_role" class="form-control" value="{{ user.target_role or '' }}" required placeholder="e.g. Senior Data Scientist">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Years of Experience</label>
-          <input type="number" name="experience_years" class="form-control" value="{{ user.experience_years or 0 }}" min="0">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Education</label>
-          <input type="text" name="education" class="form-control" value="{{ user.education or '' }}" placeholder="e.g. B.Tech CS, MBA">
-        </div>
-        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-cpu"></i> Build Roadmap</button>
-      </form>
+
     </div>
-  </div>
-  <div class="col-lg-8">
-    {% if result %}
-    <div class="card p-3">
-      <h6 class="fw-bold mb-2"><i class="bi bi-robot"></i> Your Personalised Roadmap</h6>
-      <pre class="ai-result">{{ result }}</pre>
+
+
+
+    <div class="row">
+
+        <!-- ========================================= -->
+        <!-- LEFT PANEL -->
+        <!-- ========================================= -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person-workspace text-primary"></i>
+
+                        Career Details
+
+                    </h5>
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Current Role
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="current_role"
+
+                                value="{{ user.current_role or '' }}"
+
+                                placeholder="Example: Fresher">
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Target Role
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="target_role"
+
+                                value="{{ user.target_role or '' }}"
+
+                                placeholder="Example: AI Engineer"
+
+                                required>
+
+                        </div>
+                                                <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Years of Experience
+
+                            </label>
+
+                            <input
+
+                                type="number"
+
+                                class="form-control"
+
+                                name="experience_years"
+
+                                value="{{ user.experience_years or 0 }}"
+
+                                min="0"
+
+                                max="40">
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+
+                                Education
+
+                            </label>
+
+                            <input
+
+                                type="text"
+
+                                class="form-control"
+
+                                name="education"
+
+                                value="{{ user.education or '' }}"
+
+                                placeholder="Example: B.Tech Computer Engineering">
+
+                        </div>
+
+                        <button
+
+                            class="btn btn-primary btn-lg w-100">
+
+                            <i class="bi bi-stars"></i>
+
+                            Generate AI Roadmap
+
+                        </button>
+
+                    </form>
+
+                    <hr class="my-4">
+
+                    <h6 class="fw-bold text-primary">
+
+                        <i class="bi bi-lightbulb-fill"></i>
+
+                        AI Career Tips
+
+                    </h6>
+
+                    <div class="alert alert-light border rounded-3 mb-2">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        Choose a realistic target role.
+
+                    </div>
+
+                    <div class="alert alert-light border rounded-3 mb-2">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        Mention your current experience correctly.
+
+                    </div>
+
+                    <div class="alert alert-light border rounded-3 mb-2">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        Add your highest education qualification.
+
+                    </div>
+
+                    <div class="alert alert-light border rounded-3">
+
+                        <i class="bi bi-check-circle-fill text-success"></i>
+
+                        IBM Granite AI will generate a personalized roadmap.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ========================================= -->
+
+        <!-- RIGHT PANEL -->
+
+        <!-- ========================================= -->
+
+        <div class="col-lg-8">
+          {% if result %}
+
+<div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-header bg-primary text-white py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-map-fill"></i>
+
+                AI Career Roadmap
+
+            </h5>
+
+            <span class="badge bg-light text-primary">
+
+                IBM Granite AI
+
+            </span>
+
+        </div>
+
     </div>
-    {% else %}
-    <div class="card p-4 text-center text-muted">
-      <i class="bi bi-map fs-1"></i>
-      <p class="mt-2">Fill in your details to generate a step-by-step career roadmap.</p>
+
+    <div class="card-body">
+
+        <!-- =============================== -->
+        <!-- Summary Cards -->
+        <!-- =============================== -->
+
+        <div class="row mb-4">
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-bullseye text-primary"></i>
+
+                    <h5>
+
+                        {{ user.target_role or "Target" }}
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Target Role
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-calendar-check text-success"></i>
+
+                    <h5>
+
+                        12 Months
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Timeline
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-book-half text-warning"></i>
+
+                    <h5>
+
+                        Skills
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Learning Plan
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card">
+
+                    <i class="bi bi-award text-danger"></i>
+
+                    <h5>
+
+                        Growth
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Career Goal
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- =============================== -->
+        <!-- AI Output -->
+        <!-- =============================== -->
+
+        <div class="markdown-body ai-result">
+
+            {{ result_html|safe }}
+
+        </div>
+
     </div>
-    {% endif %}
-  </div>
+
 </div>
+{% else %}
+
+<div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-body text-center p-5">
+
+        <i class="bi bi-signpost-split display-1 text-primary"></i>
+
+        <h2 class="mt-4">
+
+            Ready to Build Your Career Roadmap
+
+        </h2>
+
+        <p class="text-muted">
+
+            Enter your career details and let IBM Granite AI create
+            a personalized roadmap for your professional journey.
+
+        </p>
+
+        <hr class="my-4">
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-bullseye text-primary"></i>
+
+                    <h5 class="fw-bold">
+
+                        Career Goal
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Define your dream role and career destination.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-book-half text-success"></i>
+
+                    <h5 class="fw-bold">
+
+                        Learning Path
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        AI suggests skills, certifications and technologies.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-calendar-event text-warning"></i>
+
+                    <h5 class="fw-bold">
+
+                        Timeline
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Month-wise roadmap for continuous improvement.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card dashboard-card h-100">
+
+                    <i class="bi bi-graph-up-arrow text-danger"></i>
+
+                    <h5 class="fw-bold">
+
+                        Career Growth
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        Track your progress toward your target role.
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}
